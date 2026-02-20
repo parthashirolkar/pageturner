@@ -1,7 +1,11 @@
 import os
+import logging
 from typing import Optional
 
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
+
+logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
@@ -16,6 +20,26 @@ class Settings(BaseSettings):
     GPU_DEVICE: str = "cuda:0"
     USE_GPU: bool = True
     DTYPE: str = "bfloat16"
+    ATTN_IMPLEMENTATION: str = "flash_attention_2"
+
+    @field_validator("ATTN_IMPLEMENTATION", mode="before")
+    @classmethod
+    def validate_attn_implementation(cls, v: str) -> str:
+        valid_options = ["flash_attention_2", "sdpa", "eager"]
+        if v not in valid_options:
+            raise ValueError(f"ATTN_IMPLEMENTATION must be one of {valid_options}")
+
+        # If flash_attn is requested but not available, fall back to sdpa
+        if v == "flash_attention_2":
+            try:
+                import flash_attn  # noqa: F401
+            except ImportError:
+                logger.warning(
+                    "flash_attn not installed, falling back to 'sdpa'. "
+                    "Install flash-attn or set ATTN_IMPLEMENTATION=sdpa in .env"
+                )
+                return "sdpa"
+        return v
 
     TEMP_AUDIO_DIR: str = "/tmp/tts_output"
     AUDIO_FORMAT: str = "mp3"

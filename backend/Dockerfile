@@ -5,12 +5,13 @@ ENV PYTHONUNBUFFERED=1 \
     DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    python3.10 \
+    python3.12 \
     python3-pip \
-    python3.10-dev \
+    python3.12-dev \
     git \
     ffmpeg \
     libsndfile1 \
+    ninja-build \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

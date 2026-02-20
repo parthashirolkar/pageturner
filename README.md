@@ -36,13 +36,33 @@ PageTurner extracts content from any URL, summarizes it with an LLM, and generat
 
 ## Prerequisites
 
-| Dependency | Version       | Notes                       |
-| ---------- | ------------- | --------------------------- |
-| Python     | 3.10+         | 3.13 recommended            |
-| Node / Bun | Bun preferred | Runtime for frontend        |
-| Redis      | 5.0+          | Job state storage           |
-| CUDA       | 12.1+         | GPU inference (4-6 GB VRAM) |
-| uv         | latest        | Python package manager      |
+| Dependency | Version       | Notes                               |
+| ---------- | ------------- | ----------------------------------- |
+| Python     | 3.10+         | 3.12+ (3.12 recommended for FlashAttention-2) |
+| Node / Bun | Bun preferred | Runtime for frontend                |
+| Redis      | 5.0+          | Job state storage                   |
+| CUDA       | 12.1+         | GPU inference (4-6 GB VRAM)         |
+| GPU        | Ampere/Ada+   | Required for FlashAttention-2; older GPUs fall back to SDPA automatically |
+| uv         | latest        | Python package manager              |
+
+## FlashAttention-2 Installation (Optional)
+
+FlashAttention-2 requires prebuilt wheels matching your exact PyTorch + CUDA + Python version combination. If installation fails, the app will automatically fall back to SDPA attention.
+
+**Option 1: Install prebuilt wheel (recommended for GPU)**
+
+```bash
+# Find your matching wheel at: https://github.com/mjun0812/flash-attention-prebuild-wheels/releases
+# Example for PyTorch 2.10 + CUDA 12.8 + Python 3.12:
+uv pip install 'https://github.com/mjun0812/flash-attention-prebuild-wheels/releases/download/v0.7.16/flash_attn-2.6.3%2Bcu128torch2.10-cp312-cp312-linux_x86_64.whl'
+```
+
+**Option 2: Use SDPA (no extra installation needed)**
+
+```bash
+# Add to your .env file:
+echo "ATTN_IMPLEMENTATION=sdpa" >> backend/.env
+```
 
 ## Quick Start
 
@@ -152,7 +172,7 @@ pageturner/
 
 ## Tech Stack
 
-**Backend**: FastAPI · Python 3.13 · Qwen3-TTS · Trafilatura · Redis · Pydantic · soundfile/pydub
+**Backend**: FastAPI · Python 3.12 · Qwen3-TTS · FlashAttention-2 · Trafilatura · Redis · Pydantic · soundfile/pydub
 
 **Frontend**: React 19 · Vite 7 · TypeScript 5.9 · Tailwind CSS 4 · Axios · lucide-react
 
@@ -160,17 +180,18 @@ pageturner/
 
 All backend config is via environment variables (`.env`):
 
-| Variable          | Default                                | Description                                        |
-| ----------------- | -------------------------------------- | -------------------------------------------------- |
-| `REDIS_URL`       | —                                      | Redis connection string (required)                 |
-| `BASE_URL`        | —                                      | OpenAI-compatible API base URL (for summarization) |
-| `API_KEY`         | —                                      | API key for the summarization endpoint             |
-| `TTS_MODEL`       | `Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice` | HuggingFace model ID                               |
-| `TTS_SPEAKER`     | `Ryan`                                 | Voice speaker name                                 |
-| `GPU_DEVICE`      | `cuda:0`                               | GPU device                                         |
-| `AUDIO_FORMAT`    | `mp3`                                  | Output format (`mp3` or `wav`)                     |
-| `MAX_TEXT_LENGTH` | `100000`                               | Character limit for input text                     |
-| `CACHE_TTL`       | `3600`                                 | Job expiry in Redis (seconds)                      |
+| Variable              | Default                                | Description                                        |
+| --------------------- | -------------------------------------- | -------------------------------------------------- |
+| `REDIS_URL`           | —                                      | Redis connection string (required)                 |
+| `BASE_URL`            | —                                      | OpenAI-compatible API base URL (for summarization) |
+| `API_KEY`             | —                                      | API key for the summarization endpoint             |
+| `TTS_MODEL`           | `Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice` | HuggingFace model ID                               |
+| `TTS_SPEAKER`         | `Ryan`                                 | Voice speaker name                                 |
+| `GPU_DEVICE`          | `cuda:0`                               | GPU device                                         |
+| `AUDIO_FORMAT`        | `mp3`                                  | Output format (`mp3` or `wav`)                     |
+| `MAX_TEXT_LENGTH`     | `100000`                               | Character limit for input text                     |
+| `CACHE_TTL`           | `3600`                                 | Job expiry in Redis (seconds)                      |
+| `ATTN_IMPLEMENTATION` | `flash_attention_2`                    | Attention backend (`flash_attention_2` or `sdpa`)  |
 
 ## License
 
