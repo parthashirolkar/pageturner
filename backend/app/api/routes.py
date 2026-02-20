@@ -4,7 +4,6 @@ import uuid
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from fastapi.responses import FileResponse
-from starlette.background import BackgroundTask
 
 from app.core.config import settings
 from app.models.job import TTSJobCreate, TTSJobResponse, TTSJobStatus
