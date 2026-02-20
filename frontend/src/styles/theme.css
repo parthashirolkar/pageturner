@@ -1,0 +1,50 @@
+:root {
+  /* Modern Bauhaus Palette */
+  
+  /* Backgrounds */
+  --color-bg-primary: #F0EAE0; /* Warm paper/beige */
+  --color-bg-secondary: #E6DDD0; /* Slightly darker beige for cards/inputs */
+  --color-bg-tertiary: #D8CFC0; /* Borders/Dividers */
+
+  /* Text */
+  --color-text-primary: #2A2A2A; /* Soft Black */
+  --color-text-secondary: #5A5A5A; /* Dark Grey */
+  --color-text-inverse: #F0EAE0;
+
+  /* Accents */
+  --color-accent-primary: #D95D39; /* Terracotta/Burnt Orange */
+  --color-accent-secondary: #2D4F6C; /* Muted Deep Blue */
+  --color-accent-tertiary: #E8A838; /* Mustard Yellow */
+
+  /* Status */
+  --color-success: #4A7C59; /* Muted Green */
+  --color-error: #B33F40; /* Muted Red */
+
+  /* Typography */
+  --font-heading: 'Fraunces', serif;
+  --font-body: 'Outfit', sans-serif;
+
+  /* Spacing & Layout */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  
+  --spacing-unit: 8px;
+}
+
+[data-theme='dark'] {
+  /* Dark Mode Palette - inverted but keeping warmth */
+  --color-bg-primary: #1A1A1A; /* Deep Charcoal */
+  --color-bg-secondary: #252525;
+  --color-bg-tertiary: #333333;
+
+  --color-text-primary: #E6DDD0; /* Warm Beige */
+  --color-text-secondary: #A0A0A0;
+  --color-text-inverse: #1A1A1A;
+
+  /* Accents remain similar but adjusted for contrast if needed */
+  --color-accent-primary: #E06E4C; 
+  --color-accent-secondary: #4A6D8C;
+  --color-accent-tertiary: #F0B858;
+}

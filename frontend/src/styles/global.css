@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import './theme.css';
+
+@layer base {
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-4xl mx-auto px-6;
+  }
+
+  .btn-primary {
+    @apply bg-[var(--color-accent-primary)] text-[var(--color-text-inverse)] 
+           px-6 py-3 rounded-[var(--radius-md)] font-medium 
+           hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed
+           flex items-center justify-center gap-2;
+  }
+
+  .input-primary {
+    @apply w-full bg-[var(--color-bg-secondary)] border border-transparent
+           text-[var(--color-text-primary)] px-4 py-3 rounded-[var(--radius-md)]
+           focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]
+           placeholder-[var(--color-text-secondary)] transition-all;
+  }
+
+  .card {
+    @apply bg-[var(--color-bg-secondary)] p-6 rounded-[var(--radius-lg)] border border-[var(--color-bg-tertiary)];
+  }
+}
+
+/* Custom Animation Utilities */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
