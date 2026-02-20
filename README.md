@@ -38,12 +38,31 @@ PageTurner extracts content from any URL, summarizes it with an LLM, and generat
 
 | Dependency | Version       | Notes                               |
 | ---------- | ------------- | ----------------------------------- |
-| Python     | 3.10+         | 3.13 recommended                    |
+| Python     | 3.10+         | 3.12+ (3.12 recommended for FlashAttention-2) |
 | Node / Bun | Bun preferred | Runtime for frontend                |
 | Redis      | 5.0+          | Job state storage                   |
 | CUDA       | 12.1+         | GPU inference (4-6 GB VRAM)         |
-| GPU        | Ampere/Ada+   | RTX 3090/4060+, A100+ for FlashAttn |
+| GPU        | Ampere/Ada+   | Required for FlashAttention-2; older GPUs fall back to SDPA automatically |
 | uv         | latest        | Python package manager              |
+
+## FlashAttention-2 Installation (Optional)
+
+FlashAttention-2 requires prebuilt wheels matching your exact PyTorch + CUDA + Python version combination. If installation fails, the app will automatically fall back to SDPA attention.
+
+**Option 1: Install prebuilt wheel (recommended for GPU)**
+
+```bash
+# Find your matching wheel at: https://github.com/mjun0812/flash-attention-prebuild-wheels/releases
+# Example for PyTorch 2.10 + CUDA 12.8 + Python 3.12:
+uv pip install 'https://github.com/mjun0812/flash-attention-prebuild-wheels/releases/download/v0.7.16/flash_attn-2.6.3%2Bcu128torch2.10-cp312-cp312-linux_x86_64.whl'
+```
+
+**Option 2: Use SDPA (no extra installation needed)**
+
+```bash
+# Add to your .env file:
+echo "ATTN_IMPLEMENTATION=sdpa" >> backend/.env
+```
 
 ## Quick Start
 
@@ -153,7 +172,7 @@ pageturner/
 
 ## Tech Stack
 
-**Backend**: FastAPI · Python 3.13 · Qwen3-TTS · FlashAttention-2 · Trafilatura · Redis · Pydantic · soundfile/pydub
+**Backend**: FastAPI · Python 3.12 · Qwen3-TTS · FlashAttention-2 · Trafilatura · Redis · Pydantic · soundfile/pydub
 
 **Frontend**: React 19 · Vite 7 · TypeScript 5.9 · Tailwind CSS 4 · Axios · lucide-react
 

@@ -47,7 +47,6 @@ class TTSModelManager:
             self.model = Qwen3TTSModel.from_pretrained(
                 settings.TTS_MODEL,
                 device_map=device if settings.USE_GPU else None,
-                dtype=dtype,
                 torch_dtype=dtype,
                 attn_implementation=attn_implementation,
             )
