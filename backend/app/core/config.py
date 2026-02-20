@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     GPU_DEVICE: str = "cuda:0"
     USE_GPU: bool = True
     DTYPE: str = "bfloat16"
+    ATTN_IMPLEMENTATION: str = "flash_attention_2"
 
     TEMP_AUDIO_DIR: str = "/tmp/tts_output"
     AUDIO_FORMAT: str = "mp3"

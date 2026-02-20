@@ -37,7 +37,9 @@ class TTSModelManager:
                 else torch.float32
             )
 
-            attn_implementation = "sdpa" if settings.USE_GPU else "eager"
+            attn_implementation = (
+                settings.ATTN_IMPLEMENTATION if settings.USE_GPU else "eager"
+            )
             logger.info(
                 f"Using device: {device}, dtype: {dtype}, attention: {attn_implementation}"
             )
@@ -46,6 +48,7 @@ class TTSModelManager:
                 settings.TTS_MODEL,
                 device_map=device if settings.USE_GPU else None,
                 dtype=dtype,
+                torch_dtype=dtype,
                 attn_implementation=attn_implementation,
             )
 

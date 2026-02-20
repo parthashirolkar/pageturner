@@ -36,13 +36,14 @@ PageTurner extracts content from any URL, summarizes it with an LLM, and generat
 
 ## Prerequisites
 
-| Dependency | Version       | Notes                       |
-| ---------- | ------------- | --------------------------- |
-| Python     | 3.10+         | 3.13 recommended            |
-| Node / Bun | Bun preferred | Runtime for frontend        |
-| Redis      | 5.0+          | Job state storage           |
-| CUDA       | 12.1+         | GPU inference (4-6 GB VRAM) |
-| uv         | latest        | Python package manager      |
+| Dependency | Version       | Notes                               |
+| ---------- | ------------- | ----------------------------------- |
+| Python     | 3.10+         | 3.13 recommended                    |
+| Node / Bun | Bun preferred | Runtime for frontend                |
+| Redis      | 5.0+          | Job state storage                   |
+| CUDA       | 12.1+         | GPU inference (4-6 GB VRAM)         |
+| GPU        | Ampere/Ada+   | RTX 3090/4060+, A100+ for FlashAttn |
+| uv         | latest        | Python package manager              |
 
 ## Quick Start
 
@@ -152,7 +153,7 @@ pageturner/
 
 ## Tech Stack
 
-**Backend**: FastAPI · Python 3.13 · Qwen3-TTS · Trafilatura · Redis · Pydantic · soundfile/pydub
+**Backend**: FastAPI · Python 3.13 · Qwen3-TTS · FlashAttention-2 · Trafilatura · Redis · Pydantic · soundfile/pydub
 
 **Frontend**: React 19 · Vite 7 · TypeScript 5.9 · Tailwind CSS 4 · Axios · lucide-react
 
@@ -160,17 +161,18 @@ pageturner/
 
 All backend config is via environment variables (`.env`):
 
-| Variable          | Default                                | Description                                        |
-| ----------------- | -------------------------------------- | -------------------------------------------------- |
-| `REDIS_URL`       | —                                      | Redis connection string (required)                 |
-| `BASE_URL`        | —                                      | OpenAI-compatible API base URL (for summarization) |
-| `API_KEY`         | —                                      | API key for the summarization endpoint             |
-| `TTS_MODEL`       | `Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice` | HuggingFace model ID                               |
-| `TTS_SPEAKER`     | `Ryan`                                 | Voice speaker name                                 |
-| `GPU_DEVICE`      | `cuda:0`                               | GPU device                                         |
-| `AUDIO_FORMAT`    | `mp3`                                  | Output format (`mp3` or `wav`)                     |
-| `MAX_TEXT_LENGTH` | `100000`                               | Character limit for input text                     |
-| `CACHE_TTL`       | `3600`                                 | Job expiry in Redis (seconds)                      |
+| Variable              | Default                                | Description                                        |
+| --------------------- | -------------------------------------- | -------------------------------------------------- |
+| `REDIS_URL`           | —                                      | Redis connection string (required)                 |
+| `BASE_URL`            | —                                      | OpenAI-compatible API base URL (for summarization) |
+| `API_KEY`             | —                                      | API key for the summarization endpoint             |
+| `TTS_MODEL`           | `Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice` | HuggingFace model ID                               |
+| `TTS_SPEAKER`         | `Ryan`                                 | Voice speaker name                                 |
+| `GPU_DEVICE`          | `cuda:0`                               | GPU device                                         |
+| `AUDIO_FORMAT`        | `mp3`                                  | Output format (`mp3` or `wav`)                     |
+| `MAX_TEXT_LENGTH`     | `100000`                               | Character limit for input text                     |
+| `CACHE_TTL`           | `3600`                                 | Job expiry in Redis (seconds)                      |
+| `ATTN_IMPLEMENTATION` | `flash_attention_2`                    | Attention backend (`flash_attention_2` or `sdpa`)  |
 
 ## License
 
