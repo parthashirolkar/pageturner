@@ -1,0 +1,7 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "globals": "^17.3.0"
+  }
+}
